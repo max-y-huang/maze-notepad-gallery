@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Header, Modal, Icon, Button, Table, Label, Pagination, Input } from 'semantic-ui-react';
+import { Image, Header, Modal, Icon, Button, Table, Label, Pagination, Input, Loader } from 'semantic-ui-react';
 import axios from 'axios';
 import queryString from 'query-string';
 
@@ -16,13 +16,18 @@ class App extends React.Component {
     this.state = {
       itemData: null
     };
+    this.searchBarValue = this.getTagsFromUrl();
+  }
+
+  getTagsFromUrl = () => {
+    return queryString.parse(window.location.search)['tags'];
   }
 
   searchBarOnChange = (e) => {
     this.searchBarValue = e.target.value;
   }
   searchBarOnKeyUp = (e) => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13) {  // Enter key pressed.
       e.preventDefault();
       this.searchTags();
     }
@@ -43,7 +48,12 @@ class App extends React.Component {
   }
 
   renderItems = () => {
-    if (!this.state.itemData || !this.state.itemData[0]) {
+    if (!this.state.itemData) {
+      return (
+        <Loader active size='massive' />
+      );
+    }
+    if (this.state.itemData.length === 0) {
       return (
         <p>No mazes found.</p>
       );
@@ -72,7 +82,7 @@ class App extends React.Component {
             onChange={this.searchBarOnChange}
             onKeyUp={this.searchBarOnKeyUp}
             action={{ icon: 'search', primary: true, onClick: this.clickFunc }}
-            defaultValue={queryString.parse(window.location.search)['tags']}
+            defaultValue={this.getTagsFromUrl()}
             placeholder='Search for tags and creators'
             fluid
           />
