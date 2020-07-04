@@ -4,7 +4,6 @@
   width: 100%;
   height: 100%;
   padding: 2em;
-  border: 1px solid #ff0000;
 }
 .wrapper__results {
   flex-grow: 1;
@@ -18,10 +17,8 @@
   text-align: center;
 }
 
-.itemCard {
-  cursor: pointer;
-}
 .itemCard__image {
+  cursor: pointer;
   position: relative;
   padding-bottom: 75%;
 }
@@ -38,6 +35,7 @@
   object-fit: cover;
 }
 .itemCard__header {
+  cursor: pointer;
   margin: 0 !important;
   padding: 1em !important;
   text-align: center;
