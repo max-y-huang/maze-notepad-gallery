@@ -1,9 +1,10 @@
 import React from 'react';
-import { Image, Header, Modal, Icon, Button, Table, Label, Pagination, Input, Loader } from 'semantic-ui-react';
+import { Header, Modal, Icon, Button, Table, Label, Input, Loader } from 'semantic-ui-react';
 import axios from 'axios';
 import queryString from 'query-string';
 
 import stylesheet from './css/App.module.css';
+import itemImage__placeholder from './imgs/item__placeholder.png';
 
 import urls from './utils/urls';
 
@@ -14,13 +15,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      itemData: null
+      itemData: [],
+      totalItemCount: 0,
+      pagesLoaded: 0,
+      loadingPage: false
     };
-    this.searchBarValue = this.getTagsFromUrl();
+    this.itemsPerPage = 1;
+    this.searchBarValue = this.getUrlData()['tags'];
   }
 
-  getTagsFromUrl = () => {
-    return queryString.parse(window.location.search)['tags'];
+  getUrlData = () => {
+    return queryString.parse(window.location.search);
   }
 
   searchBarOnChange = (e) => {
@@ -37,18 +42,32 @@ class App extends React.Component {
     window.open(`?tags=${this.searchBarValue}`, '_self');
   }
 
-  getData = () => {
-    axios.get(`${urls.mazeNotepadApi}/maze/get${window.location.search}`).then(res => {
-      this.setState({ itemData: res.data.result });
+  loadNextPage = () => {
+    this.setState({ loadingPage: true });
+
+    let urlData = queryString.stringify({
+      ...this.getUrlData(),
+      ...{
+        'page': this.state.pagesLoaded + 1,
+        'page-size': this.itemsPerPage
+      }
+    });
+    axios.get(`${urls.mazeNotepadApi}/maze/get?${urlData}`).then(res => {
+      this.setState((state) => ({
+        itemData: [ ...state.itemData, ...res.data['result']['items'] ],
+        totalItemCount: res.data['result']['total-count'],
+        pagesLoaded: state.pagesLoaded + 1,
+        loadingPage: false
+      }));
     });
   }
 
   componentDidMount() {
-    this.getData();
+    this.loadNextPage();
   }
 
   renderItems = () => {
-    if (!this.state.itemData) {
+    if (this.state.loadingPage) {
       return (
         <Loader active size='massive' />
       );
@@ -68,9 +87,22 @@ class App extends React.Component {
           title={item['name']}
           mazeNotepadUrl={mazeNotepadUrl}
           imageUrl={imageUrl}
-          tags={item['tags']} />
+          tags={item['tags']}
+        />
       );
     });
+  }
+
+  renderMoreItemsButton = () => {
+    if (this.state.loadingPage) {
+      return null;
+    }
+    if (this.state.totalItemCount <= this.state.pagesLoaded * this.itemsPerPage) {  // Reached the last page.
+      return null;
+    }
+    return (
+      <Button content='Show more' onClick={this.loadNextPage} primary fluid />
+    );
   }
 
   render() {
@@ -82,17 +114,17 @@ class App extends React.Component {
             onChange={this.searchBarOnChange}
             onKeyUp={this.searchBarOnKeyUp}
             action={{ icon: 'search', primary: true, onClick: this.clickFunc }}
-            defaultValue={this.getTagsFromUrl()}
+            defaultValue={this.getUrlData()['tags']}
             placeholder='Search for tags and creators'
             fluid
           />
         </div>
         <Header>Results</Header>
         <div className={stylesheet.wrapper__results}>
-          {this.renderItems()}
-        </div>
-        <div className={stylesheet.wrapper__pagination}>
-          <Pagination defaultActivePage={1} totalPages={10} />
+          <div className={stylesheet.wrapper__results__items}>
+            {this.renderItems()}
+          </div>
+          {this.renderMoreItemsButton()}
         </div>
       </div>
     );
@@ -102,16 +134,60 @@ class App extends React.Component {
 class Item extends React.Component {
 
   state = {
-    modalOpen: false
+    modalOpen: false,
+    image: null,
   };
 
   openModal = () => this.setState({ modalOpen: true });
   closeModal = () => this.setState({ modalOpen: false });
 
-  renderTags = () => {
-    return this.props.tags.map((tag, i) => {
-      return <Label key={i} as='a' href={`?tags=${tag}`} content={tag} basic />
+  setImage = () => {
+    axios.get(this.props.imageUrl).then(res => {
+      if (res.status && res.status === 200) {
+        this.setState({ image: this.props.imageUrl });
+      }
+      else {
+        this.setState({ image: itemImage__placeholder });
+      }
+    }).catch(err => {
+      this.setState({ image: itemImage__placeholder });
     });
+  }
+
+  getImage = () => {
+    if (!this.state.image) {
+      return (
+        <Loader active />
+      );
+    }
+    return this.state.image;
+  }
+
+  componentDidMount() {
+    this.setImage();
+  }
+
+  renderThumbnail = () => {
+    if (!this.state.image) {
+      return (
+        <Loader active />
+      );
+    }
+    return (
+      <img src={this.state.image} alt='Thumbnail' />
+    );
+  }
+
+  renderTags = () => {
+    let ret = []
+    this.props.tags.forEach((tag, i) => {
+      if (!tag.hidden) {
+        ret.push(
+          <Label key={i} as='a' href={`?tags=${tag.name}`} content={tag.name} basic />
+        );
+      }
+    });
+    return ret;
   }
 
   render() {
@@ -121,7 +197,7 @@ class Item extends React.Component {
         <div className={stylesheet.itemCard}>
           <div className={stylesheet.itemCard__image} onClick={() => this.openModal()}>
             <div>
-              <img src={this.props.imageUrl} alt='Thumbnail' />
+              {this.renderThumbnail()}
             </div>
           </div>
           <Header className={stylesheet.itemCard__header} onClick={() => this.openModal()}>
@@ -131,7 +207,6 @@ class Item extends React.Component {
         <Modal open={this.state.modalOpen}>
           <Modal.Header>{this.props.title}</Modal.Header>
           <Modal.Content scrolling>
-            <Image target='_blank' src={this.props.imageUrl} fluid />
             <Table celled definition>
               <Table.Body>
                 <Table.Row>

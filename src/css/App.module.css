@@ -7,14 +7,13 @@
 }
 .wrapper__results {
   flex-grow: 1;
+}
+.wrapper__results__items {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   column-gap: 2em;
   row-gap: 2em;
   overflow-y: auto;
-}
-.wrapper__pagination {
-  text-align: center;
 }
 
 .itemCard__image {

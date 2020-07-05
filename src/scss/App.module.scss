@@ -7,15 +7,14 @@
 
   &__results {
     flex-grow: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    column-gap: 2em;
-    row-gap: 2em;
-    overflow-y: auto;
-  }
 
-  &__pagination {
-    text-align: center;
+    &__items {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      column-gap: 2em;
+      row-gap: 2em;
+      overflow-y: auto;
+    }
   }
 }
 
