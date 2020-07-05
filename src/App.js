@@ -39,7 +39,7 @@ class App extends React.Component {
   }
 
   searchTags = () => {
-    window.open(`?tags=${this.searchBarValue}`, '_self');
+    window.open(`?tags=${this.searchBarValue ? this.searchBarValue : ''}`, '_self');
   }
 
   loadNextPage = () => {
