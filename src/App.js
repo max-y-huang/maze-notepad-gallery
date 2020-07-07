@@ -20,7 +20,7 @@ class App extends React.Component {
       pagesLoaded: 0,
       loadingPage: false
     };
-    this.itemsPerPage = 1;
+    this.itemsPerPage = 20;
     this.searchBarValue = this.getUrlData()['tags'];
   }
 
@@ -80,7 +80,7 @@ class App extends React.Component {
 
     return this.state.itemData.map((item, i) => {
       let mazeNotepadUrl = `${urls.mazeNotepadJs}?maze=${item['maze-file-name']}`;
-      let imageUrl       = `${urls.mazeNotepadApi}/uploads/${item['image-file-name']}`;
+      let imageUrl       = `${urls.s3Bucket}/images/${item['image-file-name']}`;
       return (
         <Item
           key={i}
