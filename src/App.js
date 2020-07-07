@@ -115,7 +115,7 @@ class App extends React.Component {
             onKeyUp={this.searchBarOnKeyUp}
             action={{ icon: 'search', primary: true, onClick: this.clickFunc }}
             defaultValue={this.getUrlData()['tags']}
-            placeholder='Search for tags and creators'
+            placeholder='Search by name and tags...'
             fluid
           />
         </div>
