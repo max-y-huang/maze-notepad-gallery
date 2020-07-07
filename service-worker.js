@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/maze-notepad-store/precache-manifest.3b47a63b58175bebb6a8bd410d3d8e59.js"
+  "/maze-notepad-store/precache-manifest.ed89e757fb8bc29348ecaf15a5f9cf58.js"
 );
 
 self.addEventListener('message', (event) => {
