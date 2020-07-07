@@ -18,8 +18,11 @@ class App extends React.Component {
       itemData: [],
       totalItemCount: 0,
       pagesLoaded: 0,
-      loadingPage: false
+      loadingPage: false,
+      requestLoadNextPageScrollFlag: 0
     };
+    this.resultsRef = React.createRef();
+    this.loadNextPage__scrollOffset = 0;
     this.itemsPerPage = 20;
     this.searchBarValue = this.getUrlData()['tags'];
   }
@@ -43,6 +46,8 @@ class App extends React.Component {
   }
 
   loadNextPage = () => {
+    // Keep track of scroll location to preserve scroll.
+    this.loadNextPage__scrollOffset = this.resultsRef.current.scrollTop;
     this.setState({ loadingPage: true });
 
     let urlData = queryString.stringify({
@@ -57,13 +62,22 @@ class App extends React.Component {
         itemData: [ ...state.itemData, ...res.data['result']['items'] ],
         totalItemCount: res.data['result']['total-count'],
         pagesLoaded: state.pagesLoaded + 1,
-        loadingPage: false
+        loadingPage: false,
+        requestLoadNextPageScrollFlag: Date.now()
       }));
     });
   }
 
   componentDidMount() {
     this.loadNextPage();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // Scroll to previous spot after loadNextPage() is called.
+    // Preserves scroll when loading new page.
+    if (prevState.requestLoadNextPageScrollFlag !== this.state.requestLoadNextPageScrollFlag) {
+      this.resultsRef.current.scrollTo(0, this.loadNextPage__scrollOffset);
+    }
   }
 
   renderItems = () => {
@@ -120,7 +134,7 @@ class App extends React.Component {
           />
         </div>
         <Header>Results</Header>
-        <div className={stylesheet.wrapper__results}>
+        <div ref={this.resultsRef} className={stylesheet.wrapper__results}>
           <div className={stylesheet.wrapper__results__items}>
             {this.renderItems()}
           </div>
