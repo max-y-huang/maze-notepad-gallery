@@ -11,8 +11,8 @@ Hosted at: [https://max-y-huang.github.io/maze-notepad-store/](https://max-y-hua
 
 ## Frameworks and Libraries
 
-* [React.js](https://reactjs.org/)
-* [Semantic UI React](https://react.semantic-ui.com/)
+* [React.js](https://reactjs.org/) - UI
+* [Semantic UI React](https://react.semantic-ui.com/) - UI Library
 
 ## Development
 
