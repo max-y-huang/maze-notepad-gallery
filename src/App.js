@@ -5,6 +5,7 @@ import queryString from 'query-string';
 
 import stylesheet from './css/App.module.css';
 import itemImage__placeholder from './imgs/item__placeholder.png';
+import logo from './imgs/logo192.png';
 
 import urls from './utils/urls';
 
@@ -80,12 +81,29 @@ class App extends React.Component {
     }
   }
 
-  renderItems = () => {
+  renderBody = () => {
     if (this.state.loadingPage) {
       return (
         <Loader active size='massive' />
       );
     }
+
+    return (
+      <>
+        <div className={stylesheet.wrapper__body__header}>
+          <Header as='h2'>Search results ({this.state.totalItemCount} mazes found):</Header>
+        </div>
+        <div ref={this.resultsRef} className={stylesheet.wrapper__body__results}>
+          <div className={stylesheet.wrapper__body__results__items}>
+            {this.renderItems()}
+          </div>
+          {this.renderMoreItemsButton()}
+        </div>
+      </>
+    );
+  }
+
+  renderItems = () => {
     if (this.state.itemData.length === 0) {
       return (
         <p>No mazes found.</p>
@@ -108,9 +126,6 @@ class App extends React.Component {
   }
 
   renderMoreItemsButton = () => {
-    if (this.state.loadingPage) {
-      return null;
-    }
     if (this.state.totalItemCount <= this.state.pagesLoaded * this.itemsPerPage) {  // Reached the last page.
       return null;
     }
@@ -122,23 +137,24 @@ class App extends React.Component {
   render() {
     return (
       <div className={stylesheet.wrapper}>
-        <Header>Search</Header>
-        <div className={stylesheet.wrapper__search}>
-          <Input
-            onChange={this.searchBarOnChange}
-            onKeyUp={this.searchBarOnKeyUp}
-            action={{ icon: 'search', primary: true, onClick: this.clickFunc }}
-            defaultValue={this.getUrlData()['tags']}
-            placeholder='Search by name and tags...'
-            fluid
-          />
-        </div>
-        <Header>Results</Header>
-        <div ref={this.resultsRef} className={stylesheet.wrapper__results}>
-          <div className={stylesheet.wrapper__results__items}>
-            {this.renderItems()}
+        <div className={stylesheet.wrapper__title}>
+          <Header as='h1' className={stylesheet.wrapper__title__text}>
+            <img src={logo} className={stylesheet.wrapper__title__text__logo} alt='Logo' />
+            Maze Notepad Store
+          </Header>
+          <div className={stylesheet.wrapper__title__search}>
+            <Input
+              onChange={this.searchBarOnChange}
+              onKeyUp={this.searchBarOnKeyUp}
+              action={{ icon: 'search', secondary: true, onClick: this.clickFunc }}
+              defaultValue={this.getUrlData()['tags']}
+              placeholder='Search by name and tags...'
+              fluid
+            />
           </div>
-          {this.renderMoreItemsButton()}
+        </div>
+        <div className={stylesheet.wrapper__body}>
+          {this.renderBody()}
         </div>
       </div>
     );
@@ -208,13 +224,13 @@ class Item extends React.Component {
 
     return (
       <>
-        <div className={stylesheet.itemCard}>
-          <div className={stylesheet.itemCard__image} onClick={() => this.openModal()}>
+        <div className={stylesheet.itemCard} onClick={() => this.openModal()}>
+          <div className={stylesheet.itemCard__image}>
             <div>
               {this.renderThumbnail()}
             </div>
           </div>
-          <Header className={stylesheet.itemCard__header} onClick={() => this.openModal()}>
+          <Header as='h4' className={stylesheet.itemCard__header}>
             {this.props.title}
           </Header>
         </div>
