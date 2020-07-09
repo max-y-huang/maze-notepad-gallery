@@ -146,7 +146,7 @@ class App extends React.Component {
             <Input
               onChange={this.searchBarOnChange}
               onKeyUp={this.searchBarOnKeyUp}
-              action={{ icon: 'search', secondary: true, onClick: this.clickFunc }}
+              action={{ icon: 'search', secondary: true, onClick: this.searchTags }}
               defaultValue={this.getUrlData()['tags']}
               placeholder='Search by name and tags...'
               fluid
