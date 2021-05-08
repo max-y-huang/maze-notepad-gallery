@@ -25,11 +25,13 @@ class ItemModal extends React.Component {
           <div className={stylesheet.content}>
             <div>
               <h4>Description</h4>
-              <p>DECRIPTION HERE</p>
+              <p>{this.props.description ? this.props.description : 'No description.'}</p>
+              <h4>Creator</h4>
+              <p>{this.props.creator ? this.props.creator : 'Anonymous'}</p>
               <h4>Tags</h4>
-                {this.renderTags()}
+              <p>{this.renderTags()}</p>
               <h4>View</h4>
-              <Button as='a' href={this.props.mazeNotepadUrl} target='_blank' primary>Open in Maze Notepad</Button>
+              <p><Button as='a' href={this.props.mazeNotepadUrl} target='_blank' primary>Open in Maze Notepad</Button></p>
             </div>
             <img src={this.props.image} alt='Preview' />
           </div>

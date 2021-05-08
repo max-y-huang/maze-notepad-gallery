@@ -120,6 +120,8 @@ class App extends React.Component {
           mazeNotepadUrl={mazeNotepadUrl}
           imageUrl={imageUrl}
           tags={item['tags']}
+          description={item['description']}
+          creator={item['creator']}
         />
       );
     });
@@ -140,7 +142,7 @@ class App extends React.Component {
         <div className={stylesheet.wrapper__title}>
           <Header as='h1' className={stylesheet.wrapper__title__text}>
             <img src={logo} className={stylesheet.wrapper__title__text__logo} alt='Logo' />
-            Maze Notepad Store
+            Maze Gallery
           </Header>
           <div className={stylesheet.wrapper__title__search}>
             <Input

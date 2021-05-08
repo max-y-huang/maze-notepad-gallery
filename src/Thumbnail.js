@@ -75,6 +75,8 @@ class Thumbnail extends React.Component {
           mazeNotepadUrl={this.props.mazeNotepadUrl}
           image={this.state.image}
           tags={this.props.tags}
+          description={this.props.description}
+          creator={this.props.creator}
         />
       </>
     );
