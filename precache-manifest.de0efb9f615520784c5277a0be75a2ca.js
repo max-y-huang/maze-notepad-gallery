@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "6b171db9c52ff5a3ba75531288bed0da",
+    "revision": "fb7a3347732f1d8f9e1bec4389eb144d",
     "url": "/maze-notepad-gallery/index.html"
   },
   {
