@@ -2,7 +2,7 @@
 
 This is the store for [Maze Notepad JS](https://github.com/max-y-huang/maze-notepad-js/)
 
-Hosted at: [https://max-y-huang.github.io/maze-notepad-store/](https://max-y-huang.github.io/maze-notepad-store/).
+Hosted at: [https://max-y-huang.github.io/maze-notepad-gallery/](https://max-y-huang.github.io/maze-notepad-gallery/).
 
 ## Features
 
