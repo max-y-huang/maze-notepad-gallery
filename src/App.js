@@ -1,10 +1,10 @@
 import React from 'react';
-import { Header, Modal, Icon, Button, Table, Label, Input, Loader } from 'semantic-ui-react';
+import { Header, Button, Input, Loader } from 'semantic-ui-react';
+import Thumbnail from './Thumbnail';
 import axios from 'axios';
 import queryString from 'query-string';
 
 import stylesheet from './css/App.module.css';
-import itemImage__placeholder from './imgs/item__placeholder.png';
 import logo from './imgs/logo192.png';
 
 import urls from './utils/urls';
@@ -114,7 +114,7 @@ class App extends React.Component {
       let mazeNotepadUrl = `${urls.mazeNotepadJs}?maze=${item['maze-file-name']}`;
       let imageUrl       = `${urls.s3Bucket}/images/${item['image-file-name']}`;
       return (
-        <Item
+        <Thumbnail
           key={i}
           title={item['name']}
           mazeNotepadUrl={mazeNotepadUrl}
@@ -153,111 +153,14 @@ class App extends React.Component {
             />
           </div>
         </div>
-        <div className={stylesheet.wrapper__body}>
-          {this.renderBody()}
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div className={stylesheet.wrapper__body}>
+            {this.renderBody()}
+          </div>
         </div>
       </div>
     );
   }
-}
-
-class Item extends React.Component {
-
-  state = {
-    modalOpen: false,
-    image: null,
-  };
-
-  openModal = () => this.setState({ modalOpen: true });
-  closeModal = () => this.setState({ modalOpen: false });
-
-  setImage = () => {
-    axios.get(this.props.imageUrl).then(res => {
-      if (res.status && res.status === 200) {
-        this.setState({ image: this.props.imageUrl });
-      }
-      else {
-        this.setState({ image: itemImage__placeholder });
-      }
-    }).catch(err => {
-      this.setState({ image: itemImage__placeholder });
-    });
-  }
-
-  getImage = () => {
-    if (!this.state.image) {
-      return (
-        <Loader active />
-      );
-    }
-    return this.state.image;
-  }
-
-  componentDidMount() {
-    this.setImage();
-  }
-
-  renderThumbnail = () => {
-    if (!this.state.image) {
-      return (
-        <Loader active />
-      );
-    }
-    return (
-      <img src={this.state.image} alt='Thumbnail' />
-    );
-  }
-
-  renderTags = () => {
-    let ret = []
-    this.props.tags.forEach((tag, i) => {
-      if (!tag.hidden) {
-        ret.push(
-          <Label key={i} as='a' href={`?tags=${tag.name}`} content={tag.name} basic />
-        );
-      }
-    });
-    return ret;
-  }
-
-  render() {
-
-    return (
-      <>
-        <div className={stylesheet.itemCard} onClick={() => this.openModal()}>
-          <div className={stylesheet.itemCard__image}>
-            <div>
-              {this.renderThumbnail()}
-            </div>
-          </div>
-          <Header as='h4' className={stylesheet.itemCard__header}>
-            {this.props.title}
-          </Header>
-        </div>
-        <Modal open={this.state.modalOpen}>
-          <Modal.Header>{this.props.title}</Modal.Header>
-          <Modal.Content scrolling>
-            <Table celled definition>
-              <Table.Body>
-                <Table.Row>
-                  <Table.Cell>Tag(s)</Table.Cell>
-                  <Table.Cell>
-                    {this.renderTags()}
-                  </Table.Cell>
-                </Table.Row>
-              </Table.Body>
-            </Table>
-            <Button as='a' href={this.props.mazeNotepadUrl} target='_blank' primary fluid>Open in Maze Notepad</Button>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button primary onClick={() => this.closeModal()}>
-              <Icon name='close' /> Close
-            </Button>
-          </Modal.Actions>
-        </Modal>
-      </>
-    );
-  };
 }
 
 export default App;

@@ -1,0 +1,15 @@
+.content {
+  display: flex;
+
+  & > *:nth-child(1) {
+    width: 35%;
+  }
+
+  & > *:nth-child(2) {
+    width: 65%;
+    padding: 1em;
+    margin-left: 1em;
+    border: 1px solid rgba(34,36,38,.15);
+    border-radius: 4;
+  }
+}

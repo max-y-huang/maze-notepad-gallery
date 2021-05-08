@@ -1,0 +1,30 @@
+.wrapper {
+  cursor: pointer;
+}
+.wrapper__image {
+  position: relative;
+  padding-bottom: 75%;
+}
+.wrapper__image > div {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.wrapper__image > div > img {
+  padding: 1em;
+  padding-bottom: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+.wrapper__header {
+  margin: 0 !important;
+  padding: 1em !important;
+  text-align: center;
+  border-radius: 0 0 8px 8px;
+}
+
+/*# sourceMappingURL=Thumbnail.module.css.map */
