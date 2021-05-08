@@ -10,6 +10,7 @@
   margin-left: 1em;
   border: 1px solid rgba(34, 36, 38, 0.15);
   border-radius: 4;
+  image-rendering: pixelated;
 }
 
 /*# sourceMappingURL=ItemModal.module.css.map */
