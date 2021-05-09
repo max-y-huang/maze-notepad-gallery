@@ -6,11 +6,23 @@
 }
 .content > *:nth-child(2) {
   width: 65%;
-  padding: 1em;
   margin-left: 1em;
   border: 1px solid rgba(34, 36, 38, 0.15);
   border-radius: 4;
-  image-rendering: pixelated;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.content > *:nth-child(2) > img {
+  width: 100%;
+  padding: 2em;
+}
+.content__tag {
+  margin: 2px !important;
+}
+.content__tag__wrapper {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 /*# sourceMappingURL=ItemModal.module.css.map */

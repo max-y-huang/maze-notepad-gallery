@@ -10,7 +10,7 @@ class ItemModal extends React.Component {
     this.props.tags.forEach((tag, i) => {
       if (!tag.hidden) {
         ret.push(
-          <Label key={i} as='a' href={`?tags=${tag.name}`} content={tag.name} basic color='blue' />
+          <Label key={i} as='a' className={stylesheet.content__tag} href={`?tags=${tag.name}`} content={tag.name} basic color='blue' />
         );
       }
     });
@@ -29,11 +29,13 @@ class ItemModal extends React.Component {
               <h4>Creator</h4>
               <p>{this.props.creator ? this.props.creator : 'Anonymous'}</p>
               <h4>Tags</h4>
-              <p>{this.renderTags()}</p>
+              <p className={stylesheet.content__tag__wrapper}>{this.renderTags()}</p>
               <h4>View</h4>
               <p><Button as='a' href={this.props.mazeNotepadUrl} target='_blank' primary>Open in Maze Notepad</Button></p>
             </div>
-            <img src={this.props.image} alt='Preview' />
+            <div>
+              <img src={this.props.image} alt='Preview' />
+            </div>
           </div>
         </Modal.Content>
       </Modal>

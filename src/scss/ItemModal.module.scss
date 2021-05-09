@@ -7,10 +7,26 @@
 
   & > *:nth-child(2) {
     width: 65%;
-    padding: 1em;
     margin-left: 1em;
     border: 1px solid rgba(34,36,38,.15);
     border-radius: 4;
-    image-rendering: pixelated;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    & > img {
+      width: 100%;
+      // image-rendering: pixelated;
+      padding: 2em;
+    }
+  }
+
+  &__tag {
+    margin: 2px !important;
+
+    &__wrapper {
+      display: flex;
+      flex-wrap: wrap;
+    }
   }
 }
